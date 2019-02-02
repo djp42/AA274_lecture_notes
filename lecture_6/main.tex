@@ -4,6 +4,7 @@
 \usepackage[sc]{mathpazo}
 \usepackage{amsmath}
 \usepackage{graphicx}
+\usepackage{hyperref} % for url
 \renewcommand{\sfdefault}{kurier}
 
 
@@ -69,6 +70,22 @@
 \end{enumerate}
 
 	Recognition of landmarks utilizes known characteristics of particular structures such as orthogonal walls. Depth from focus determines distance to a point by taking multiple images with progressively better focus. Stereo vision triangulates the distance of a point in 3D by its coordinates in two distinct images taken at the same time by cameras with known relative pose. Structure from motion processes multiple images taken at different times. A key aspect of stereo vision and structure from motion is finding point correspondences across multiple images. Much of this lecture covers geometric constraints used to narrow the search space for finding point correspondences. Complementary readings \cite{SNS, FP}
+
+\section{Related Works}
+Stereo Vision is widely used throughout the robotics community. As such, there are many additional resources to reference if desired.
+Below, we include a list of a few of those resources:
+\begin{enumerate}
+	\item \textit{Computer Vision: A Modern Approach}~\cite{FP}
+	\item OpenCV, the open source project for all things computer vision, has some pretty good tutorials on stereo vision. 
+	Specifically, there are tutorials for Camera Calibration, Pose Estimation, Epipolar Geometry, and Creating a Depth Map from Stereo Images. 
+	These can all be accessed at~\url{https://docs.opencv.org/3.1.0/d9/db7/tutorial_py_table_of_contents_calib3d.html}.
+\end{enumerate}
+There are also many other techniques that are being investigated in the academic community for other methods of determining distance to objects from images. We learn about a few of them in this lecture, but there are many others:
+\begin{enumerate}
+	\item Learning based approaches~\cite{Saxena_depth_est}.
+	\item Neural Networks for depth estimation~\cite{nips_depth,single_image_depth,Schennings1167554}.
+	\item Using assumptions of the world~\cite{effecient_exact,inside_box}.
+\end{enumerate}
 
 \section{Method \#1 Depth from Focus}
 
