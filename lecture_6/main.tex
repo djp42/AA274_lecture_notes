@@ -81,7 +81,7 @@ Thus, mathematically, speaking our objective is:
 subject to 
 
 \begin{equation} \label{eqno:3}
-||m^2|| = 1
+||m||^2 = 1
 \end{equation}
 
 Following the approach taken in solving constrained optimization problems in the previous sections of the course, the first step is to form a Lagrangian and then try to optimize the Lagrangian. Since two norm of vector x can also be written as $x^T x$, the Lagrangian to the optimization problem we are interested in becomes:
@@ -117,21 +117,21 @@ Since we are interested in minimizing L, we would like to pick the smallest eige
 
 The construction of matrix $\tilde{P}$ has already been discussed in the previous class. For the matrix $\tilde{P}$, if we can find the smallest eigen-vector corresponding to the matrix $\tilde{P}^T \tilde{P}$, our problem of finding optimal vector m which contains the parameters corresponding to camera is solved. The desired smallest eigen-vector can be found using SVD.
 
-Any m X n real matrix can be written as 
+Using Singular Value Decomposition method, any m X n real matrix can be written as 
 \begin{equation} \label{eqno:9}
 \tilde{P} = U \Sigma V^T \end{equation}
 
 where U and V are orthogonal matrices of shape m X m and n X n respectively and $\Sigma $ is a diagonal matrix. Since U and V are orthogonal, $U^TU = V^TV = I$.  As a result, we have
 
 \begin{equation} \label{eqno:10}
-\tilde{P}^T \tilde{P} V = (U \Sigma V^T)^T (U \Sigma V^T) V = (V \Sigma^T U^T U \Sigma V = V \Sigma \Sigma  \end{equation}
+\tilde{P}^T \tilde{P} V = (U \Sigma V^T)^T (U \Sigma V^T) V = V \Sigma^T U^T U \Sigma V = V \Sigma \Sigma  \end{equation}
 
 Further, since,  $\Sigma$ is a diagonal matrix, any column vector v belonging to matrix V follows the following equation,
 
 \begin{equation} \label{eqno:10}
 \tilde{P}^T \tilde{P} \vec{v} = \sigma^2 \vec{v}  \end{equation}
 
-where $\sigma$ is the corresponding non zero element in the matrix $\Sigma$. Thus, vector v which belongs to column space of matrix M is an eigen-vector of matrix $\tilde{P}\tilde{P}$. By finding the smallest $\sigma$ in the $\Sigma$ matrix and finding the corresponding column in the matrix V, the desired optimal vector m can be found.
+where $\sigma$ is the corresponding non zero element in the matrix $\Sigma$. Thus, vector v which belongs to column space of matrix V is an eigen-vector of matrix $\tilde{P}\tilde{P}$. By finding the smallest $\sigma$ in the $\Sigma$ matrix and finding the corresponding column in the matrix V, the desired optimal vector m can be found.
 
 Once the optimal vector m is found, it can be factorized from 12X1 row vector to 3X4 matrix such that M = [KR Kt] where K is an upper triangular matrix and R is a rotation matrix. By doing RQ factorization of first 3 columns of $\tilde{P}$, K and R can be determined. Since K is known, by pre-multiplying the fourth column with inverse of K, t can be determined. Thus, the parameters corresponding to camera are determined
 
