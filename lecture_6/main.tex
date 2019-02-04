@@ -489,7 +489,7 @@ where $d$ is a vector containing $n$ integer disparities $d_p$ corresponding to 
 \newpage
 \section{Method \#3 Structure From Motion (SFM)}
 
-The Structure From Motion (SFM) method uses a similar principle than Stereopsis but in a different fashion : we do not take images from two cameras at the same time, but instead we take images from one camera at different points in time as we move the camera around the object. Here, the intrinsics parameters are the same because we are using one camera, but the extrinsic changes as we move the camera.
+The Structure From Motion (SFM) method uses a similar principle than Stereopsis but in a different fashion: we do not take images from two cameras at the same time, but instead we take images from one camera at different points in time as we move the camera around the object. Here, the intrinsics parameters are the same because we are using one camera, but the extrinsic changes as we move the camera.
 
 \begin{figure}[h!]
   \begin{center}
@@ -512,6 +512,14 @@ However, SFM is difficult to use because it has ambiguities. That is, we cannot 
 \end{figure}
 
 The concept of SFM is similar to visual odometry, which estimate the motion of a robot by using visual inputs in series. This is widely used in reality, including on Mars by rovers. SFM can be a very powerful method because it not only allows us to reconstruct the environment but also to recover the motion of the camera.
+
+\section{Real World Examples}
+Extracting data from images is an important part of many robotics problems, and there are many examples of these principles in real applications. For example, NASA's Mars Exploration Rovers Spirit and Opportunity, which landed on Mars in 2004, are equipped with stereo cameras that allow the vehicles to autonomously navigate challenging terrain~\cite{goldberg2002stereo}. Due to the limited computational ability of radiation-hardened processors in 2004, the onboard algorithms first downsize camera images by averaging pixel values. Next, the images are rectified to ensure that epipolar lines are aligned horizontally. The Laplacian of the images is then used to correlate pixels and calculate a range estimate. However, some range estimates are unreliable, so an algorithm filters the estimates and uses only reliable estimates for the onboard autonomous system. 
+
+In 2010, Microsoft released its Kinect motion sensing device, which uses an infrared projector and camera to measure depth~\cite{zhang2012microsoft}. The projector produces a known pattern of dots, which allows the camera to triangulate the points and produce a 3D reconstruction. The Kinect sensor has been used in many applications including hand gesture recognition~\cite{ren2011robust} and helicopter control~\cite{stowers2011altitude}.
+
+More recently, the Intel RealSense camera uses left-right stereo infrared cameras along with an infrared projector to measure depth~\cite{keselman2017intel}. The Intel RealSense camera is becoming more widely used because it is small, lightweight, accurate, and cheap. The RealSense camera has been used in many applications including patient health monitoring~\cite{siena2018utilising}, facial recognition~\cite{patil2016real}, and aircraft localization and mapping~\cite{bi2016mav}. 
+
 
 \newpage
 
