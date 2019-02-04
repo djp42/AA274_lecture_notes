@@ -59,6 +59,82 @@
 %modify this
 \lecture{6}{Stereo Vision and Structure from Motion}{}
 
+\section{Optimal vector m derivation : SVD}
+In the previous class, the following equation was derived : 
+\begin{equation} \label{eqno:1}
+  \tilde{P}m = 0
+\end{equation}
+
+There are 11 unknowns which are captured in the vector m. The shape of m is (12,1). If data is available for n correspondences between pixel coordinates and their coordinates in world frame, the shape of $\tilde{P}$ will be (2n,12).  
+Since there are 11 unknowns, to solve the system of equations, 6 correspondences are required (since each correspondence gives 2 equations). To avoid noise in data and other inaccuracies, it is desirable to consider more correspondences. Higher the number of correspondences, lower will be the impact of noise on the parameter fitting process. 
+
+However, having more than 6 correspondences will result in 'over constrained' problem. Ideally, if there is no noise in the system, $\tilde{P}m$ will still be 0, because the system of equations will be linearly dependent on the 12 basis equations. 
+
+Because of noise, the objective now is to find m such that the vector $\tilde{P}m$ is closest to 0. Thus, we are effectively trying to minimize the residual (i.e. $\vec{\tilde{P}m}-\vec{0}$) of the norm. Minimization problems corresponding to norm are easier to solve if the norm is differentiable; since the 2 norm is differentiable, the objective is to minimize the 2 norm of $ \tilde{P}m $  vector. Further, we are interested in non trivial solution for m. Since the scaling of m does not matter, we would like our problem be subject to the constraint 2 norm of m being 1. 
+
+Thus, mathematically, speaking our objective is: 
+
+\begin{equation} \label{eqno:2}
+  \min_{m\in R^{12}} ||{\tilde{P}m}||^2 
+\end{equation}
+
+subject to 
+
+\begin{equation} \label{eqno:3}
+||m^2|| = 1
+\end{equation}
+
+Following the approach taken in solving constrained optimization problems in the previous sections of the course, the first step is to form a Lagrangian and then try to optimize the Lagrangian. Since two norm of vector x can also be written as $x^T x$, the Lagrangian to the optimization problem we are interested in becomes:
+
+\begin{equation} \label{eqno:4}
+ L(m,\lambda) = m^T \tilde{P}^T \tilde{P}m + \lambda (1-(m^T m))
+\end{equation}
+
+where lambda is the Lagrange multiplier. By taking gradient with respect to m and and lambda equating them to 0 , the following equations can be written.
+
+
+\begin{equation} \label{eqno:5}
+\nabla_m{L(m^*,\lambda^*)} = 2 \tilde{P}^T \tilde{P} m^* - 2 \lambda m^* = 0
+\end{equation}
+
+\begin{equation} \label{eqno:6}
+\nabla_\lambda{L(m^*,\lambda)} = 1-  m^*^T m^* = 0
+\end{equation}
+
+
+Rearranging the terms of the equations, we have 
+
+\begin{equation} \label{eqno:7}
+\tilde{P}^T \tilde{P} m^* =  \lambda m^*  \end{equation}
+
+Thus, $m^*$ and $\lambda^* $ are eigenvector and eigenvalue respectively of the matrix $ \tilde{P}^T \tilde{P}$ . Further, substituting back the values of  $m^*$ and $\lambda^* $ into the cost function L, we have 
+
+\begin{equation} \label{eqno:8}
+L = m^*^T(\tilde{P}^T \tilde{P} m)+ \lambda^* (1-m^*^T m^*) = m^*^T(\lambda^* m^*) + 0 = \lambda^*
+\end{equation}
+
+Since we are interested in minimizing L, we would like to pick the smallest eigen-value of matrix $\tilde{P}^T \tilde{P}$. Eigen-values, eigen-vectors come in pairs. Thus, to minimize our cost function L, the eigen-vector corresponding to the smallest vector of the matrix $\tilde{P}^T \tilde{P}$ will give the optimal vector m. 
+
+The construction of matrix $\tilde{P}$ has already been discussed in the previous class. For the matrix $\tilde{P}$, if we can find the smallest eigen-vector corresponding to the matrix $\tilde{P}^T \tilde{P}$, our problem of finding optimal vector m which contains the parameters corresponding to camera is solved. The desired smallest eigen-vector can be found using SVD.
+
+Any m X n real matrix can be written as 
+\begin{equation} \label{eqno:9}
+\tilde{P} = U \Sigma V^T \end{equation}
+
+where U and V are orthogonal matrices of shape m X m and n X n respectively and $\Sigma $ is a diagonal matrix. Since U and V are orthogonal, $U^TU = V^TV = I$.  As a result, we have
+
+\begin{equation} \label{eqno:10}
+\tilde{P}^T \tilde{P} V = (U \Sigma V^T)^T (U \Sigma V^T) V = (V \Sigma^T U^T U \Sigma V = V \Sigma \Sigma  \end{equation}
+
+Further, since,  $\Sigma$ is a diagonal matrix, any column vector v belonging to matrix V follows the following equation,
+
+\begin{equation} \label{eqno:10}
+\tilde{P}^T \tilde{P} \vec{v} = \sigma^2 \vec{v}  \end{equation}
+
+where $\sigma$ is the corresponding non zero element in the matrix $\Sigma$. Thus, vector v which belongs to column space of matrix M is an eigen-vector of matrix $\tilde{P}\tilde{P}$. By finding the smallest $\sigma$ in the $\Sigma$ matrix and finding the corresponding column in the matrix V, the desired optimal vector m can be found.
+
+Once the optimal vector m is found, it can be factorized from 12X1 row vector to 3X4 matrix such that M = [KR Kt] where K is an upper triangular matrix and R is a rotation matrix. By doing RQ factorization of first 3 columns of $\tilde{P}$, K and R can be determined. Since K is known, by pre-multiplying the fourth column with inverse of K, t can be determined. Thus, the parameters corresponding to camera are determined
+
 \section{Introduction}
 
 	This lecture \cite{slides} covers geometric concepts needed for 3D reconstruction.  The common methods for reconstructing a 3D scene from 2D images are :
