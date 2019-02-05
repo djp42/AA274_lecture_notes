@@ -137,6 +137,14 @@ Once the optimal vector m is found, it can be factorized from 12X1 row vector to
 
 \section{Introduction}
 
+	\textbf{Motivation}
+	
+	When a robot uses a camera to take an image it loses depth information in transforming the 3D scene into a 2D image.  Recovering the structure of the 3D world can supplement onboard sensors and assist in understanding the environment and estimating the robot's motion.
+	
+	For example, multiple images can be used to extract depth information and perform range sensing for obstacle avoidance.  Additionally the robot's motion can be estimated from several images, this is called visual odometry.  Motion and optical flow can be used to estimate the motion of other objects \cite{SNS} .  See the section on Real World Examples for more uses of recovering structure in robotics.
+	
+	\textbf{Core Concepts}
+	
 	This lecture \cite{slides} covers geometric concepts needed for 3D reconstruction.  The common methods for reconstructing a 3D scene from 2D images are :
 \begin{enumerate}
 \item Recognition of landmarks
