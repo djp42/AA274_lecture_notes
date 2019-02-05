@@ -60,12 +60,12 @@
 \lecture{6}{Stereo Vision and Structure from Motion}{}
 
 \section{Optimal vector m derivation : SVD}
-In the previous class, the following equation was derived : 
+In the previous class, the following equation was derived: 
 \begin{equation} \label{eqno:1}
   \tilde{P}m = 0
 \end{equation}
 
-There are 11 unknowns which are captured in the vector m. The shape of m is (12,1). If data is available for n correspondences between pixel coordinates and their coordinates in world frame, the shape of $\tilde{P}$ will be (2n,12).  
+There are 11 unknowns which are captured in the vector m. The shape of m is (12,1). If data is available for n correspondences between pixel coordinates and their coordinates in world frame, the shape of $\tilde{P}$ will be $(2n,12)$.  
 Since there are 11 unknowns, to solve the system of equations, 6 correspondences are required (since each correspondence gives 2 equations). To avoid noise in data and other inaccuracies, it is desirable to consider more correspondences. Higher the number of correspondences, lower will be the impact of noise on the parameter fitting process. 
 
 However, having more than 6 correspondences will result in 'over constrained' problem. Ideally, if there is no noise in the system, $\tilde{P}m$ will still be 0, because the system of equations will be linearly dependent on the 12 basis equations. 
@@ -98,7 +98,7 @@ where lambda is the Lagrange multiplier. By taking gradient with respect to m an
 \end{equation}
 
 \begin{equation} \label{eqno:6}
-\nabla_\lambda{L(m^*,\lambda)} = 1-  m^*^T m^* = 0
+\nabla_\lambda{L(m^*,\lambda)} = 1-  m^{*T} m^* = 0
 \end{equation}
 
 
@@ -110,7 +110,7 @@ Rearranging the terms of the equations, we have
 Thus, $m^*$ and $\lambda^* $ are eigenvector and eigenvalue respectively of the matrix $ \tilde{P}^T \tilde{P}$ . Further, substituting back the values of  $m^*$ and $\lambda^* $ into the cost function L, we have 
 
 \begin{equation} \label{eqno:8}
-L = m^*^T(\tilde{P}^T \tilde{P} m)+ \lambda^* (1-m^*^T m^*) = m^*^T(\lambda^* m^*) + 0 = \lambda^*
+L = m^{*T}(\tilde{P}^T \tilde{P} m)+ \lambda^* (1-m^{*T} m^*) = m^{*T}(\lambda^* m^*) + 0 = \lambda^*
 \end{equation}
 
 Since we are interested in minimizing L, we would like to pick the smallest eigen-value of matrix $\tilde{P}^T \tilde{P}$. Eigen-values, eigen-vectors come in pairs. Thus, to minimize our cost function L, the eigen-vector corresponding to the smallest vector of the matrix $\tilde{P}^T \tilde{P}$ will give the optimal vector m. 
@@ -136,10 +136,14 @@ where $\sigma$ is the corresponding non zero element in the matrix $\Sigma$. Thu
 Once the optimal vector m is found, it can be factorized from 12X1 row vector to 3X4 matrix such that M = [KR Kt] where K is an upper triangular matrix and R is a rotation matrix. By doing RQ factorization of first 3 columns of $\tilde{P}$, K and R can be determined. Since K is known, by pre-multiplying the fourth column with inverse of K, t can be determined. Thus, the parameters corresponding to camera are determined
 
 \section{Introduction}
+The purpose of this lecture is to provide some necessary concepts for 3D reconstruction. This lecture explores concepts required and useful for mapping, and dives deeper into Stereo Vision and Structure From Motion (SFM).	
+
 
 	\textbf{Motivation}
 	
-	When a robot uses a camera to take an image it loses depth information in transforming the 3D scene into a 2D image.  Recovering the structure of the 3D world can supplement onboard sensors and assist in understanding the environment and estimating the robot's motion.
+	When a robot uses a camera to take an image it loses depth information in transforming the 3D scene into a 2D image.  
+	Recovering the structure of the 3D world can supplement onboard sensors and assist in understanding the environment and estimating the robot's motion.
+	This kind of 3D reconstruction from imaging is necessary for autonomous robots to maneuver and interact with the physical space around them. Accurate and precise models allow for more efficient planning and movement, as well as necessary information recoverable by the a robot, such as the use of SFM for visual odometry.
 	
 	For example, multiple images can be used to extract depth information and perform range sensing for obstacle avoidance.  Additionally the robot's motion can be estimated from several images, this is called visual odometry.  Motion and optical flow can be used to estimate the motion of other objects \cite{SNS} .  See the section on Real World Examples for more uses of recovering structure in robotics.
 	
@@ -147,10 +151,10 @@ Once the optimal vector m is found, it can be factorized from 12X1 row vector to
 	
 	This lecture \cite{slides} covers geometric concepts needed for 3D reconstruction.  The common methods for reconstructing a 3D scene from 2D images are :
 \begin{enumerate}
-\item Recognition of landmarks
-\item Depth from focus
-\item Stereo vision
-\item Structure from motion.
+\item Recognition of landmarks - Recognition of landmarks leverages known characteristics of particular structures such as orthogonal walls.
+\item Depth from focus - Depth from focus determines distance to a point by taking multiple images with progressively better focus.
+\item Stereo vision - Stereo vision triangulates the distance of a point in 3D by its coordinates in two distinct images taken at the same time by cameras with known relative pose.
+\item Structure from motion - Structure from motion processes multiple images taken at different times.
 \end{enumerate}
 
 	Recognition of landmarks utilizes known characteristics of particular structures such as orthogonal walls. Depth from focus determines distance to a point by taking multiple images with progressively better focus. Stereo vision triangulates the distance of a point in 3D by its coordinates in two distinct images taken at the same time by cameras with known relative pose. Structure from motion processes multiple images taken at different times. A key aspect of stereo vision and structure from motion is finding point correspondences across multiple images. Much of this lecture covers geometric constraints used to narrow the search space for finding point correspondences. Complementary readings \cite{SNS, FP}
@@ -168,7 +172,7 @@ There are also many other techniques that are being investigated in the academic
 \begin{enumerate}
 	\item Learning based approaches~\cite{Saxena_depth_est}.
 	\item Neural Networks for depth estimation~\cite{nips_depth,single_image_depth,Schennings1167554}.
-	\item Using assumptions of the world~\cite{effecient_exact,inside_box}.
+	\item Using assumptions of the world to simplify calculations and extract information from single images~\cite{effecient_exact,inside_box}.
 \end{enumerate}
 
 \section{Method \#1 Depth from Focus}
